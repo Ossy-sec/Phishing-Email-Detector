@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Phishing Email Detector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page">
+    <main class="wrap">
+
+      <header class="header">
+        <div class="eyebrow">Security tool</div>
+        <h1 class="title">Phishing Email Detector</h1>
+        <p class="subtitle">Paste an email, upload a .eml or .txt file, or choose a sample to review potential phishing signals.</p>
+      </header>
+
+      <div class="card">
+        <div class="tabs" id="tabs" role="tablist" aria-label="Choose an email input method">
+          <button class="tab active" id="tab-paste" type="button" role="tab" aria-selected="true" aria-controls="panel-paste" data-tab="paste">Paste text</button>
+          <button class="tab" id="tab-upload" type="button" role="tab" aria-selected="false" aria-controls="panel-upload" data-tab="upload" tabindex="-1">Upload .eml</button>
+          <button class="tab" id="tab-samples" type="button" role="tab" aria-selected="false" aria-controls="panel-samples" data-tab="samples" tabindex="-1">Sample emails</button>
+        </div>
+
+        <div class="tab-panel" id="panel-paste" role="tabpanel" aria-labelledby="tab-paste">
+          <label class="visually-hidden" for="rawInput">Email text, including any sender and subject headers</label>
+          <textarea id="rawInput" aria-describedby="status" placeholder="Paste the full email here — including headers like From: and Subject."></textarea>
+        </div>
+
+        <div class="tab-panel" id="panel-upload" role="tabpanel" aria-labelledby="tab-upload" hidden>
+          <label class="dropzone" id="dropzone" tabindex="0">
+            <input type="file" id="fileInput" accept=".eml,.txt,text/plain,message/rfc822" aria-label="Choose an .eml or .txt email file" />
+            <div class="dropzone-icon">📎</div>
+            <div class="dropzone-label" id="dropzoneLabel">Click or drop a .eml/.txt file</div>
+            <div class="dropzone-hint">.eml or .txt, up to 2 MB</div>
+          </label>
+        </div>
+
+        <div class="tab-panel" id="panel-samples" role="tabpanel" aria-labelledby="tab-samples" hidden>
+          <div class="sample-grid" id="sampleGrid"></div>
+        </div>
+
+        <p class="status" id="status" role="status" aria-live="polite" aria-atomic="true">Analysis runs locally in your browser. Email text is limited to 2 MB; results are heuristic and may miss phishing emails or flag legitimate messages.</p>
+
+        <div class="chips" id="chips" hidden>
+          <div class="chip" id="fromChip"></div>
+          <div class="chip chip-muted" id="subjectChip" hidden></div>
+        </div>
+
+        <div class="actions">
+          <button class="button button-primary" id="analyzeButton" type="button">Analyze Email</button>
+          <button class="button button-secondary" id="resetButton" type="button">Reset</button>
+        </div>
+      </div>
+
+      <section class="results" id="results" aria-label="Email analysis results" hidden>
+        <div class="col-left">
+
+          <div class="card">
+            <h2 class="section-label">Risk score</h2>
+            <div class="score-row">
+              <div class="score-number" id="scoreNumber">0</div>
+              <div class="score-max">/ 100</div>
+            </div>
+            <div class="bucket-label" id="bucketLabel"></div>
+            <div class="meter-track" id="scoreMeter" role="progressbar" aria-label="Phishing risk score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="meter-fill" id="meterFill"></div>
+            </div>
+            <div class="bucket-desc" id="bucketDesc"></div>
+            <p class="assessment-note" id="assessmentNote">Bands: 0 no indicators · 1–19 low · 20–39 moderate · 40–69 high · 70–100 critical.</p>
+          </div>
+
+          <div class="card">
+            <h2 class="section-label">Findings</h2>
+            <p class="coverage-note" id="coverageNote"></p>
+            <div class="findings" id="findings" role="list"></div>
+          </div>
+
+          <div class="card">
+            <h2 class="section-label">Recommendations</h2>
+            <div class="recommendations" id="recommendations" role="list"></div>
+          </div>
+
+        </div>
+
+        <div class="col-right">
+          <div class="card">
+            <div class="annotated-header">
+              <h2 class="section-label">Annotated email</h2>
+              <div class="legend" aria-label="Highlight severity">
+                  <div class="legend-item"><span class="legend-dot" style="background:#F3B0A5"></span>High severity</div>
+                  <div class="legend-item"><span class="legend-dot" style="background:#F1CE93"></span>Medium severity</div>
+                  <div class="legend-item"><span class="legend-dot" style="background:#EEE29B"></span>Low severity</div>
+              </div>
+              </div>
+            <div class="annotated-body" id="annotatedBody"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
